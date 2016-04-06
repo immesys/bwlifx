@@ -2,7 +2,11 @@
 // bwlifx service. Just modify the code to work for you lol
 package main
 
-import bw "gopkg.in/immesys/bw2bind.v2"
+import (
+	"fmt"
+
+	bw "gopkg.in/immesys/bw2bind.v2"
+)
 
 type hsbcmd struct {
 	Hue        float64 `msgpack:"hue,omitempty"`
@@ -10,6 +14,8 @@ type hsbcmd struct {
 	Brightness float64 `msgpack:"brightness,omitempty"`
 	State      bool    `msgpack:"state,omitempty"`
 }
+
+const BaseURI = "oski.demo/lighting/0/"
 
 func main() {
 	cl := bw.ConnectOrExit("")
@@ -25,9 +31,11 @@ func main() {
 	po, _ := bw.CreateMsgPackPayloadObject(bw.PONumHSBLightMessage, &cmd)
 
 	cl.PublishOrExit(&bw.PublishParams{
-		URI:            "castle.bw2.io/michael/0/bwlifx/hsb-light.v1/slot/hsb",
+		URI:            BaseURI + "bwlifx/hsb-light.v1/slot/hsb",
 		PayloadObjects: []bw.PayloadObject{po},
 		AutoChain:      true,
 	})
+
+	fmt.Println("Published")
 
 }

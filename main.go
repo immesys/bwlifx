@@ -39,6 +39,7 @@ func main() {
 }
 
 func dispatch(m *bw.SimpleMessage) {
+	m.Dump()
 	po := m.GetOnePODF(bw.PODFHSBLightMessage)
 	if po == nil {
 		return
@@ -73,9 +74,9 @@ func dispatch(m *bw.SimpleMessage) {
 	}
 	msg := fmt.Sprintf("{\"power\":\"%s\",\"duration\":0.1%s}", pstr, colorstr)
 
-	spawnable.DoHttpPutStr(fmt.Sprintf("https://api.lifx.com/v1/lights/%s/state", lid),
+	fmt.Println(spawnable.DoHttpPutStr(fmt.Sprintf("https://api.lifx.com/v1/lights/%s/state", lid),
 		msg, []string{"Content-Type", `application/json`,
-			"Authorization", "Bearer " + btok})
+			"Authorization", "Bearer " + btok}))
 }
 
 func clamp(f *float64) {
