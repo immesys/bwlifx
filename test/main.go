@@ -2,11 +2,7 @@
 // bwlifx service. Just modify the code to work for you lol
 package main
 
-import (
-	"fmt"
-
-	bw "gopkg.in/immesys/bw2bind.v1"
-)
+import bw "gopkg.in/immesys/bw2bind.v2"
 
 type hsbcmd struct {
 	Hue        float64 `msgpack:"hue,omitempty"`
@@ -17,24 +13,21 @@ type hsbcmd struct {
 
 func main() {
 	cl := bw.ConnectOrExit("")
-	cl.OverrideAutoChainTo(true)
-
-	// UPDATE THIS TO WORK FOR YOU
-	cl.SetEntityFileOrExit("/home/immesys/.ssh/michael.key")
+	cl.SetEntityFileOrExit("thekey.key")
 
 	cmd := hsbcmd{
-		Hue:        0.3,
+		Hue:        0.7,
 		Saturation: 0.5,
-		Brightness: 0.5,
+		Brightness: 0.7,
 		State:      true,
 	}
 
 	po, _ := bw.CreateMsgPackPayloadObject(bw.PONumHSBLightMessage, &cmd)
 
-	err := cl.Publish(&bw.PublishParams{
+	cl.PublishOrExit(&bw.PublishParams{
 		URI:            "castle.bw2.io/michael/0/bwlifx/hsb-light.v1/slot/hsb",
 		PayloadObjects: []bw.PayloadObject{po},
+		AutoChain:      true,
 	})
-	fmt.Println("Published, err was: ", err)
 
 }
