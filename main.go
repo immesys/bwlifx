@@ -25,6 +25,7 @@ func main() {
 	btok = params.MustString("bearer_token")
 	lid = params.MustString("light_id")
 
+	params.MergeMetadata(cl)
 	command_uri := uri + "bwlifx/hsb-light.v1/slot/hsb"
 
 	//Subscribe
