@@ -18,12 +18,12 @@ var lid string
 func main() {
 	cl := bw.ConnectOrExit("")
 	params := spawnable.GetParamsOrExit()
-	eblob := spawnable.GetEntityOrExit(params)
-	us := cl.SetEntityOrExit(eblob)
+	eblob := params.GetEntityOrExit()
+	cl.SetEntityOrExit(eblob)
 
 	uri := params.MustString("svc_base_uri")
-	btok := params.MustString("bearer_token")
-	lid := params.MustString("light_id")
+	btok = params.MustString("bearer_token")
+	lid = params.MustString("light_id")
 
 	command_uri := uri + "bwlifx/hsb-light.v1/slot/hsb"
 
@@ -74,7 +74,7 @@ func dispatch(m *bw.SimpleMessage) {
 	msg := fmt.Sprintf("{\"power\":\"%s\",\"duration\":0.1%s}", pstr, colorstr)
 
 	spawnable.DoHttpPutStr(fmt.Sprintf("https://api.lifx.com/v1/lights/%s/state", lid),
-		msg, []String{"Content-Type", `application/json`,
+		msg, []string{"Content-Type", `application/json`,
 			"Authorization", "Bearer " + btok})
 }
 
