@@ -5,7 +5,7 @@ package main
 import (
 	"fmt"
 
-	bw "gopkg.in/immesys/bw2bind.v2"
+	bw "github.com/immesys/bw2bind"
 )
 
 type hsbcmd struct {
@@ -15,11 +15,11 @@ type hsbcmd struct {
 	State      bool    `msgpack:"state,omitempty"`
 }
 
-const BaseURI = "oski.demo/lighting/0/"
+const BaseURI = "410.dev/lighting/s.lifx/0"
 
 func main() {
 	cl := bw.ConnectOrExit("")
-	cl.SetEntityFileOrExit("thekey.key")
+	cl.SetEntityFromEnvironOrExit()
 
 	cmd := hsbcmd{
 		Hue:        0.7,
@@ -31,7 +31,7 @@ func main() {
 	po, _ := bw.CreateMsgPackPayloadObject(bw.PONumHSBLightMessage, &cmd)
 
 	cl.PublishOrExit(&bw.PublishParams{
-		URI:            BaseURI + "bwlifx/hsb-light.v1/slot/hsb",
+		URI:            BaseURI + "/i.hsblight/slot/hsb",
 		PayloadObjects: []bw.PayloadObject{po},
 		AutoChain:      true,
 	})
